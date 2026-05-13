@@ -11,14 +11,24 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.6'
+
       - name: Unzip project
         run: unzip DailyPlanner.zip
+
+      - name: Generate Gradle wrapper
+        run: |
+          cd DailyPlanner
+          gradle wrapper --gradle-version 8.6
 
       - name: Build APK
         run: |
           cd DailyPlanner
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
